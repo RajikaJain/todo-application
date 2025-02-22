@@ -1,0 +1,8 @@
+kubectl create secret docker-registry my-registry-secret \
+    --docker-server=index.docker.io \
+    --docker-username=rajikajain2035_gkfdgfgfkjgdfkg \
+    --docker-password=dckr_pat_UKYRfvaW_EBaWbJ02vW01MsdaeE_ajfdgkgrifnfgfgbierweahgpEFIFdfgdfjg \
+    --docker-email=rajikajain28@gmail.com
+
+GitHub - email -> rajikajain28@gmail.com
+         pat token -> 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_jdfkgkjeirweiwfddfgkfdfgkjfdgfkjfdgjk
