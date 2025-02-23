@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = 'docker-hub-credentials' // Docker Hub credentials ID
         REPO_URL = 'https://github.com/RajikaJain/todo-application.git'
-        IMAGE_NAME = 'todo-application'
+        IMAGE_NAME = 'todo-application-image'
         IMAGE_TAG = 'latest'
     }
     
@@ -15,8 +15,8 @@ pipeline {
                     // Cloning the repository from GitHub
                     sh 'which git || echo "Git not found"'
                     sh 'git --version'
-                    sh 'git clone -b master ${REPO_URL} repo'
-                    //git credentialsId: 'git-credentials' git url: "$REPO_URL", branch: 'master'
+                    //sh 'git clone -b master ${REPO_URL} repo'
+                    git credentialsId: 'git-credentials' , url: "$REPO_URL", branch: 'master'
                 }
             }
         }
@@ -45,7 +45,8 @@ pipeline {
                     // Log in to Docker Hub and push the image
                     withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
+                        sh 'docker tag $IMAGE_NAME:$IMAGE_TAG rajikajain2035/$IMAGE_NAME:$IMAGE_TAG'
+                        sh 'docker push rajikajain2035/$IMAGE_NAME:$IMAGE_TAG'
                     }
                 }
             }
@@ -55,7 +56,7 @@ pipeline {
             steps {
                 script {
                     // Deploy using Docker Compose
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
@@ -64,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // Verifying that the services are up and running
-                    sh 'docker-compose ps'
+                    sh 'docker compose ps'
                 }
             }
         }
@@ -86,4 +87,3 @@ pipeline {
         }
     }
 }
-
